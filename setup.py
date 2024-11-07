@@ -16,7 +16,6 @@ setup(
         "langchain-core",
         "langchain-community",
         "langchain",
-        "langchain-openai"
         "pydantic",
         "openai",
         "sentence-transformers",
