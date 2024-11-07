@@ -123,7 +123,7 @@ class VectorEmbeddingService:
             metadata=message_data['metadata']
         )
 
-    def process_message(self, index_name,message_data,cleanup_strategy):
+    def process_message(self, index_name,message_data,cleanup_strategy,source):
         """Process a single message and handle embeddings directly."""
         try:
             self.logger.info(f"Processing message_data: {message_data}")
@@ -131,12 +131,6 @@ class VectorEmbeddingService:
             metadata = message_data.get('metadata', {})
             self.logger.info(f"Extracted metadata: {metadata}")
 
-            source = str.lower(metadata.get('source'))
-            self.logger.info(f"Extracted source: {source}")
-
-            if not source:
-                self.logger.error("source not found in metadata")
-                raise KeyError("source not found in message metadata")
             # Get or create vector store and record manager for this index
             vector_store = self._get_or_create_vector_store(index_name)
             record_manager = self._get_or_create_record_manager(index_name)
@@ -148,7 +142,7 @@ class VectorEmbeddingService:
                 vector_store=vector_store,
                 cleanup=cleanup_strategy,
                 record_manager=record_manager,
-                source_id_key="source",  # Adjust as per Index implementation
+                source_id_key=source,  # Adjust as per Index implementation
             )
 
             self.logger.info(f"Successfully processed message for index: {index_name}")
