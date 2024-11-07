@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 from typing import Dict, Optional
 from dotenv import load_dotenv
@@ -122,8 +123,9 @@ class VectorEmbeddingService:
             metadata=message_data.get('metadata', {})
         )
 
-    def process_message(self, message_data: dict):
+    def process_message(self, message):
         """Process a single message and handle embeddings directly."""
+        message_data=json.loads(message)
         try:
             self.logger.info(f"Processing message_data: {message_data}")
 
