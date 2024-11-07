@@ -10,6 +10,7 @@ from langchain_elasticsearch import ElasticsearchStore
 from langchain_core.documents import Document
 from langchain.indexes import SQLRecordManager
 from flowgen_emedding.utils.custom_logger import setup_logging
+import pprint
 
 
 class VectorEmbeddingService:
@@ -116,14 +117,18 @@ class VectorEmbeddingService:
             self.record_managers[index_name] = record_manager
         return self.record_managers[index_name]
 
-    def create_document(self, message_data: dict) -> Document:
+    def create_document(self, message_data) -> Document:
         """Create a Document object from message data."""
+        content=message_data['content']
+        if type(content)==dict:
+            content=pprint.pformat(message_data['content'])
+
         return Document(
-            page_content=json.dumps(message_data['content']),
+            page_content=content,
             metadata=message_data['metadata']
         )
 
-    def process_message(self, index_name,message_data,cleanup_strategy,source):
+    def process_message(self, index_name,message_data,cleanup_strategy,source_id):
         """Process a single message and handle embeddings directly."""
         try:
             self.logger.info(f"Processing message_data: {message_data}")
@@ -142,7 +147,7 @@ class VectorEmbeddingService:
                 vector_store=vector_store,
                 cleanup=cleanup_strategy,
                 record_manager=record_manager,
-                source_id_key=source,  # Adjust as per Index implementation
+                source_id_key=source_id,  # Adjust as per Index implementation
             )
 
             self.logger.info(f"Successfully processed message for index: {index_name}")
@@ -159,15 +164,13 @@ async def main():
 
     # Example usage of the process_message method with mock data
     test_message = {
-        "author_name": "User123",
-        "timestamp": "2024-11-06T12:34:56Z",
-        "content": "Sample message content 25555",
+        "content":"Sample message content 888899878",
         "metadata": {
-            "source": "12234456663",
-            "index_name":"cube10-karafs-luna-test"
+            "source": "3",
+            "name":"aidin"
         }
     }
-    service.process_message(test_message)
+    service.process_message(index_name="cube10-karafs-luna-test",message_data=test_message,cleanup_strategy='incremental',source_id='source')
 
 
 if __name__ == "__main__":
