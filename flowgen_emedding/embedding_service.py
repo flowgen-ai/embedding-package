@@ -123,7 +123,7 @@ class VectorEmbeddingService:
         if type(content)==dict:
             content=pprint.pformat(message_data['content'])
 
-            remove_chars = "{}[]\""
+            remove_chars = "{}[]\"\'"
             translation_table = str.maketrans('', '', remove_chars)
 
             # Remove the unwanted characters
@@ -170,7 +170,10 @@ async def main():
 
     # Example usage of the process_message method with mock data
     test_message = {
-        "content":"Sample message content 888899878",
+        "content":{
+            "source": "3",
+            "name":"aidin"
+        },
         "metadata": {
             "source": "3",
             "name":"aidin"
