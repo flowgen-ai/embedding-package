@@ -123,7 +123,7 @@ class VectorEmbeddingService:
             metadata=message_data['metadata']
         )
 
-    def process_message(self, message_data):
+    def process_message(self, index_name,message_data,cleanup_strategy):
         """Process a single message and handle embeddings directly."""
         try:
             self.logger.info(f"Processing message_data: {message_data}")
@@ -137,24 +137,44 @@ class VectorEmbeddingService:
             if not source:
                 self.logger.error("source not found in metadata")
                 raise KeyError("source not found in message metadata")
-
             # Get or create vector store and record manager for this index
-            vector_store = self._get_or_create_vector_store(source)
-            record_manager = self._get_or_create_record_manager(source)
+            vector_store = self._get_or_create_vector_store(index_name)
+            record_manager = self._get_or_create_record_manager(index_name)
 
             # Create and embed document
             doc = self.create_document(message_data)
             Index(
                 docs_source=[doc],
                 vector_store=vector_store,
-                cleanup= self.env_vars['RECORD_MANAGER_CLEANUP'],
+                cleanup=cleanup_strategy,
                 record_manager=record_manager,
                 source_id_key="source",  # Adjust as per Index implementation
             )
 
-            self.logger.info(f"Successfully processed message for index: {source}")
+            self.logger.info(f"Successfully processed message for index: {index_name}")
 
         except KeyError as err:
             self.logger.error(f"Missing required field in message: {err}")
         except Exception as err:
             self.logger.error(f"Error processing message: {str(err)}")
+
+
+async def main():
+    """Main entry point for testing the service."""
+    service = VectorEmbeddingService()
+
+    # Example usage of the process_message method with mock data
+    test_message = {
+        "author_name": "User123",
+        "timestamp": "2024-11-06T12:34:56Z",
+        "content": "Sample message content 25555",
+        "metadata": {
+            "source": "12234456663",
+            "index_name":"cube10-karafs-luna-test"
+        }
+    }
+    service.process_message(test_message)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
