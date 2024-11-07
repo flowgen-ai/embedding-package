@@ -109,7 +109,7 @@ class VectorEmbeddingService:
         """Get existing record manager or create new one for the index."""
         if index_name not in self.record_managers:
             record_manager = SQLRecordManager(
-                namespace=str.index_name,
+                namespace=index_name,
                 db_url=self.env_vars['POSTGRES_CONNECTION_STRING']
             )
             record_manager.create_schema()
