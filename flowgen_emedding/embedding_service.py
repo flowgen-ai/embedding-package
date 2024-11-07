@@ -148,7 +148,7 @@ class VectorEmbeddingService:
                 vector_store=vector_store,
                 cleanup= self.env_vars['RECORD_MANAGER_CLEANUP'],
                 record_manager=record_manager,
-                source_id_key='source_id',  # Adjust as per Index implementation
+                source_id_key=source_id,  # Adjust as per Index implementation
             )
 
             self.logger.info(f"Successfully processed message for index: {source_id}")
