@@ -147,7 +147,7 @@ class VectorEmbeddingService:
             Index(
                 docs_source=[doc],
                 vector_store=vector_store,
-                cleanup='full',
+                # cleanup='full',
                 record_manager=record_manager,
                 source_id_key="source",  # Adjust as per Index implementation
             )
