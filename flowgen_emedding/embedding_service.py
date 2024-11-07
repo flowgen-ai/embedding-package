@@ -116,7 +116,7 @@ class VectorEmbeddingService:
             self.record_managers[index_name] = record_manager
         return self.record_managers[index_name]
 
-    def create_discord_document(self, message_data: dict) -> Document:
+    def create_document(self, message_data: dict) -> Document:
         """Create a Document object from message data."""
         return Document(
             page_content=message_data['content'],
@@ -143,7 +143,7 @@ class VectorEmbeddingService:
             record_manager = self._get_or_create_record_manager(source)
 
             # Create and embed document
-            doc = self.create_discord_document(message_data)
+            doc = self.create_document(message_data)
             Index(
                 docs_source=[doc],
                 vector_store=vector_store,
