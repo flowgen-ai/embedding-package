@@ -119,13 +119,12 @@ class VectorEmbeddingService:
     def create_discord_document(self, message_data: dict) -> Document:
         """Create a Document object from message data."""
         return Document(
-            page_content=f"{message_data['author_name']} — {message_data['timestamp']}\n{message_data['content']}",
-            metadata=message_data.get('metadata', {})
+            page_content=message_data['content'],
+            metadata=message_data['metadata']
         )
 
-    def process_message(self, message):
+    def process_message(self, message_data):
         """Process a single message and handle embeddings directly."""
-        message_data=json.loads(message)
         try:
             self.logger.info(f"Processing message_data: {message_data}")
 
