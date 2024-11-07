@@ -123,6 +123,12 @@ class VectorEmbeddingService:
         if type(content)==dict:
             content=pprint.pformat(message_data['content'])
 
+            remove_chars = "{}[]\""
+            translation_table = str.maketrans('', '', remove_chars)
+
+            # Remove the unwanted characters
+            content = content.translate(translation_table)
+
         return Document(
             page_content=content,
             metadata=message_data['metadata']
