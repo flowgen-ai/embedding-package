@@ -130,16 +130,16 @@ class VectorEmbeddingService:
             metadata = message_data.get('metadata', {})
             self.logger.info(f"Extracted metadata: {metadata}")
 
-            source_id = metadata.get('source_id')
-            self.logger.info(f"Extracted source_id: {source_id}")
+            source = metadata.get('source')
+            self.logger.info(f"Extracted source: {source}")
 
-            if not source_id:
+            if not source:
                 self.logger.error("source_id not found in metadata")
-                raise KeyError("source_id not found in message metadata")
+                raise KeyError("source not found in message metadata")
 
             # Get or create vector store and record manager for this index
-            vector_store = self._get_or_create_vector_store(source_id)
-            record_manager = self._get_or_create_record_manager(source_id)
+            vector_store = self._get_or_create_vector_store(source)
+            record_manager = self._get_or_create_record_manager(source)
 
             # Create and embed document
             doc = self.create_discord_document(message_data)
@@ -148,13 +148,12 @@ class VectorEmbeddingService:
                 vector_store=vector_store,
                 cleanup= self.env_vars['RECORD_MANAGER_CLEANUP'],
                 record_manager=record_manager,
-                source_id_key=source_id,  # Adjust as per Index implementation
+                source_id_key="source",  # Adjust as per Index implementation
             )
 
-            self.logger.info(f"Successfully processed message for index: {source_id}")
+            self.logger.info(f"Successfully processed message for index: {source}")
 
         except KeyError as err:
             self.logger.error(f"Missing required field in message: {err}")
         except Exception as err:
             self.logger.error(f"Error processing message: {str(err)}")
-
