@@ -119,7 +119,7 @@ class VectorEmbeddingService:
     def create_document(self, message_data: dict) -> Document:
         """Create a Document object from message data."""
         return Document(
-            page_content=message_data['content'],
+            page_content=json.dumps(message_data['content']),
             metadata=message_data['metadata']
         )
 
