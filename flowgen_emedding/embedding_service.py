@@ -109,7 +109,7 @@ class VectorEmbeddingService:
         """Get existing record manager or create new one for the index."""
         if index_name not in self.record_managers:
             record_manager = SQLRecordManager(
-                namespace=index_name,
+                namespace=str.index_name,
                 db_url=self.env_vars['POSTGRES_CONNECTION_STRING']
             )
             record_manager.create_schema()
@@ -131,11 +131,11 @@ class VectorEmbeddingService:
             metadata = message_data.get('metadata', {})
             self.logger.info(f"Extracted metadata: {metadata}")
 
-            source = metadata.get('source')
+            source = str.lower(metadata.get('source'))
             self.logger.info(f"Extracted source: {source}")
 
             if not source:
-                self.logger.error("source_id not found in metadata")
+                self.logger.error("source not found in metadata")
                 raise KeyError("source not found in message metadata")
 
             # Get or create vector store and record manager for this index
