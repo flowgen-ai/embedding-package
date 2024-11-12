@@ -17,6 +17,7 @@ setup(
         "langchain-community",
         "langchain_elasticsearch",
         "langchain",
+        "langchain_openai",
         "openai",
         "elasticsearch",
         "python-dotenv",
