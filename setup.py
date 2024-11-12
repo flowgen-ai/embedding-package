@@ -15,14 +15,12 @@ setup(
     install_requires=[
         "langchain-core",
         "langchain-community",
+        "langchain_elasticsearch",
         "langchain",
-        "pydantic",
         "openai",
-        "sentence-transformers",
         "elasticsearch",
         "python-dotenv",
         "psycopg2-binary",
-        "tiktoken"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
